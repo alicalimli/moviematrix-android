@@ -3,16 +3,18 @@ import { createSelector, createSlice } from "@reduxjs/toolkit";
 const bookmarksSlice = createSlice({
   name: "bookmarks",
   initialState: {
-    bookmarkedIds: [],
+    items: [],
   },
   reducers: {
     addBookmark: (state, action) => {
-      state.bookmarkedIds.push(action.payload);
+      state.items.push(action.payload);
     },
     removeBookmark: (state, action) => {
-      state.bookmarkedIds = state.bookmarkedIds.filter(
-        (item) => item.id !== action.payload.id
+      const newItems = state.items.filter(
+        (item) => +item.id !== +action.payload
       );
+
+      state.items = newItems;
     },
   },
 });

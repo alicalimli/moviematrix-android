@@ -11,18 +11,18 @@ import {
 import { Stack, useRouter } from "expo-router";
 import CardsSection from "../components/home/cards-section/CardsSection";
 import { useEffect, useState } from "react";
-
-const apiKey = "b51b535b2fa399a23d7dfdf78f4f91c3";
+import { API_KEY } from "../config";
+import { useAppSelector } from "../hooks/use-redux";
+import { getBookmarksState } from "../redux/slices/bookmarksSlice";
 
 const Home = () => {
   const router = useRouter();
 
   const [trendings, setTrendings] = useState([]);
+  const { items: bookmarksData } = useAppSelector(getBookmarksState);
 
   useEffect(() => {
-    fetch(
-      `https://api.themoviedb.org/3/trending/all/day?api_key=${process.env.API_KEY}`
-    )
+    fetch(`https://api.themoviedb.org/3/trending/all/day?api_key=${API_KEY}`)
       .then((res) => res.json())
       .then((data) => setTrendings(data.results));
   }, []);
@@ -50,6 +50,7 @@ const Home = () => {
         <CardsSection sectionTitle="Trending Now" cardsData={trendings} />
         <CardsSection sectionTitle="Movies" cardsData={trendings} />
         <CardsSection sectionTitle="TV Shows" cardsData={trendings} />
+        <CardsSection sectionTitle="Bookmarks" cardsData={bookmarksData} />
       </ScrollView>
     </SafeAreaView>
   );

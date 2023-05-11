@@ -15,20 +15,22 @@ import {
   getBookmarksState,
   removeBookmark,
 } from "../../redux/slices/bookmarksSlice";
+import { API_KEY } from "../../config";
 
 interface CardDetailsProps {}
 
 const CardDetails = ({ id, type }: CardDetailsProps) => {
-  const { bookmarkedIds } = useAppSelector(getBookmarksState);
-
-  const isBookmarked = bookmarkedIds.includes(+id);
-
+  const { items } = useAppSelector(getBookmarksState);
   const dispatch = useAppDispatch();
+
+  const isBookmarked = items.find((item) => +item.id === +id) ? true : false;
+
   const [movie, setMovie] = useState(null);
+
   useEffect(() => {
     const fetchMovie = async () => {
       const response = await fetch(
-        `https://api.themoviedb.org/3/${type}/${id}?api_key=${process.env.API_KEY}`
+        `https://api.themoviedb.org/3/${type}/${id}?api_key=${API_KEY}`
       );
       const data = await response.json();
       setMovie(data);
@@ -41,8 +43,8 @@ const CardDetails = ({ id, type }: CardDetailsProps) => {
     return <Text>Loading...</Text>;
   }
 
-  const onBookmarkPress = (id: number) => {
-    dispatch(isBookmarked ? removeBookmark(id) : addBookmark(id));
+  const onBookmarkPress = (detail: any) => {
+    dispatch(isBookmarked ? removeBookmark(+detail.id) : addBookmark(detail));
   };
 
   return (
@@ -74,7 +76,7 @@ const CardDetails = ({ id, type }: CardDetailsProps) => {
             </Text>
             <TouchableOpacity
               className="ml-auto"
-              onPress={() => onBookmarkPress(+movie.id)}
+              onPress={() => onBookmarkPress(movie)}
             >
               <Text
                 className={`
@@ -82,7 +84,7 @@ const CardDetails = ({ id, type }: CardDetailsProps) => {
                 border border-[#20C997] p-2 px-6 rounded-md text-lg 
               `}
               >
-                Bookmark
+                {isBookmarked ? "Bookmarked" : "Bookmark"}
               </Text>
             </TouchableOpacity>
           </View>
