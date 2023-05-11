@@ -1,7 +1,13 @@
-import {Stack} from 'expo-router'
+import { Stack } from "expo-router";
+import { store } from "../redux/store";
+import { Provider } from "react-redux";
 
-const  Layout = () => {
-  return <Stack />
-}
+const Layout = () => {
+  return (
+    <Provider store={store}>
+      <Stack />
+    </Provider>
+  );
+};
 
-export default Layout
+export default Layout;
