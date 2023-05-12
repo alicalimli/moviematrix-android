@@ -2,7 +2,7 @@ import { Stack, useSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView, Text, Image, View } from "react-native";
 
-import CardDetails from "../components/card-details/CardDetails";
+import CardDetails from "../../components/card-details/CardDetails";
 
 interface CardDetailsProps {}
 
@@ -11,7 +11,7 @@ const CardDetailsPage = ({}: CardDetailsProps) => {
 
   const mediaType = String(id).replace(/[0-9]/g, "");
   const newId = String(id).replace(/\D/g, "");
-
+  console.log(id);
   return <CardDetails type={mediaType} id={newId} />;
 };
 

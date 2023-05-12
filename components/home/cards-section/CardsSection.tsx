@@ -16,7 +16,7 @@ const CardsSection = ({
   const router = useRouter();
   const onImagePress = (card) => {
     console.log(card);
-    router.push("/" + card.media_type + card.id);
+    router.push("/details/" + card.media_type + card.id);
   };
 
   return (
@@ -25,19 +25,25 @@ const CardsSection = ({
       <FlatList
         data={cardsData}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => onImagePress(item)}>
+          <TouchableOpacity
+            className="flex-auto"
+            onPress={() => onImagePress(item)}
+          >
             <Image
               source={{
                 uri: `https://image.tmdb.org/t/p/w500/${item.poster_path}`,
               }}
               resizeMethod="resize"
-              className="w-40 h-52 object-contain"
+              className="h-64 ml-2"
             />
           </TouchableOpacity>
         )}
-        horizontal
-        contentContainerStyle={{ columnGap: 8 }}
-        keyExtractor={(item) => item.id}
+        numColumns={2}
+        contentContainerStyle={{
+          gap: 8,
+          width: "100%",
+        }}
+        keyExtractor={(item) => `key-${item.name ?? item.title}`}
       />
     </View>
   );
