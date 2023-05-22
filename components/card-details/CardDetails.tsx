@@ -1,4 +1,4 @@
-import { Stack, useSearchParams } from "expo-router";
+import { Stack, useNavigation, useSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
@@ -19,6 +19,9 @@ import {
 import { API_KEY } from "../../config";
 import { useQuery } from "@tanstack/react-query";
 
+import Ionicons from "@expo/vector-icons/Ionicons";
+import Constants from "expo-constants";
+
 const fetchDetails = async (mediaType: "movie" | "tv", id: number) => {
   const response = await fetch(
     `https://api.themoviedb.org/3/${mediaType}/${id}?api_key=${API_KEY}`
@@ -37,6 +40,8 @@ const fetchDetails = async (mediaType: "movie" | "tv", id: number) => {
 interface CardDetailsProps {}
 
 const CardDetails = ({ id, type }: CardDetailsProps) => {
+  const navigation = useNavigation();
+
   const { items } = useAppSelector(getBookmarksState);
   const dispatch = useAppDispatch();
 
@@ -80,33 +85,47 @@ const CardDetails = ({ id, type }: CardDetailsProps) => {
                 resizeMode="cover"
                 className="w-full h-96"
               />
+
+              <TouchableOpacity
+                style={{
+                  marginTop: Constants.statusBarHeight,
+                  marginLeft: 16,
+                }}
+                className="absolute"
+                onPress={() => navigation.goBack()}
+              >
+                <Ionicons name="arrow-back" size={24} color="white" />
+              </TouchableOpacity>
             </View>
 
-            <View className="p-2">
+            <View className="p-4 gap-2">
               <View className="flex flex-row flex-wrap items-center">
                 <Text className="text-[#fff] text-2xl font-medium">
                   {details?.title}
                 </Text>
-                <TouchableOpacity
-                  className="ml-auto"
-                  onPress={() => onBookmarkPress(details)}
-                >
-                  <Text
-                    className={`
+              </View>
+
+              <Text className="text-slate-300 text-sm">
+                {details?.overview}
+              </Text>
+              <TouchableOpacity
+                className="flex-1"
+                onPress={() => onBookmarkPress(details)}
+              >
+                <Text
+                  className={`
+                      text-center
                   ${
                     isBookmarked
                       ? "bg-[#20C997] text-[#fff]"
                       : "text-[#20C997] "
                   }
-                  border border-[#20C997] p-2 px-6 rounded-md text-lg 
+                  border border-[#20C997] p-2 px-6 text-lg rounded-full
                 `}
-                  >
-                    {isBookmarked ? "Bookmarked" : "Bookmark"}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-              <Text className="text-[#fff] text-lg">{details?.overview}</Text>
-              <Text className="text-[#fff] text-lg">{details?.overview}</Text>
+                >
+                  {isBookmarked ? "Bookmarked" : "Bookmark"}
+                </Text>
+              </TouchableOpacity>
             </View>
           </ScrollView>
         )}
