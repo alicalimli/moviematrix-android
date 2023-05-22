@@ -1,19 +1,12 @@
-import {
-  View,
-  ScrollView,
-  Text,
-  SafeAreaView,
-  TouchableOpacity,
-  Image,
-  ActivityIndicator,
-  StatusBar,
-} from "react-native";
+import { View, SafeAreaView } from "react-native";
 import { Stack, useRouter, useSearchParams } from "expo-router";
 import CardsSection from "../components/home/cards-section/CardsSection";
 import { useEffect, useState } from "react";
 import { API_KEY } from "../config";
 import { useAppSelector } from "../hooks/use-redux";
 import { getBookmarksState } from "../redux/slices/bookmarksSlice";
+
+import Constants from "expo-constants";
 
 const getApiURL = (type, apiKey) => {
   switch (type) {
@@ -48,14 +41,17 @@ const CardsPage = () => {
     <SafeAreaView className="flex-1 bg-[#111] px-4">
       <Stack.Screen
         options={{
-          headerStyle: { backgroundColor: "#111" },
+          headerStyle: {
+            backgroundColor: "#111",
+          },
           headerShadowVisible: false,
           headerTitle: "",
           headerShown: false,
         }}
       />
 
-      <CardsSection sectionTitle="Trending Now" cardsData={cardsData} />
+      <View style={{ marginTop: Constants.statusBarHeight }} />
+      <CardsSection cardsData={cardsData} />
     </SafeAreaView>
   );
 };

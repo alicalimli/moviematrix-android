@@ -3,16 +3,10 @@ import React from "react";
 import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 
 interface CardsSectionProps {
-  sectionTitle: string;
   cardsData: any[];
-  onShowMore: () => void;
 }
 
-const CardsSection = ({
-  sectionTitle,
-  cardsData,
-  onShowMore,
-}: CardsSectionProps) => {
+const CardsSection = ({ cardsData }: CardsSectionProps) => {
   const router = useRouter();
   const onImagePress = (card) => {
     console.log(card);
@@ -21,7 +15,6 @@ const CardsSection = ({
 
   return (
     <View className="flex gap-2 mb-6">
-      <Text className="text-[#fff] text-2xl">{sectionTitle}</Text>
       <FlatList
         data={cardsData}
         renderItem={({ item }) => (
