@@ -46,20 +46,12 @@ const CardsPage = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-[#111] px-4">
-      <StatusBar barStyle="light-content" />
-
       <Stack.Screen
         options={{
           headerStyle: { backgroundColor: "#111" },
           headerShadowVisible: false,
           headerTitle: "",
-          headerLeft: () => (
-            <Image
-              className="w-12 h-12"
-              resizeMode="cover"
-              source={require("../assets/logo.png")}
-            />
-          ),
+          headerShown: false,
         }}
       />
 

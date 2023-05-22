@@ -26,7 +26,7 @@ const CardsSection = ({
         data={cardsData}
         renderItem={({ item }) => (
           <TouchableOpacity
-            className="flex-auto"
+            className={`${cardsData.length > 1 ? "flex-1" : "w-1/2"}`}
             onPress={() => onImagePress(item)}
           >
             <Image

@@ -59,10 +59,9 @@ const CardDetails = ({ id, type }: CardDetailsProps) => {
     <SafeAreaView className="bg-[#111] flex-1">
       <Stack.Screen
         options={{
-          headerStyle: { backgroundColor: "#111" },
           headerShadowVisible: false,
-          headerTintColor: "white",
-          headerTitle: id,
+          headerTitle: "",
+          headerShown: false,
         }}
       />
 
