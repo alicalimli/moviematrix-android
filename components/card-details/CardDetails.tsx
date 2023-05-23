@@ -10,17 +10,17 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
-import { useAppDispatch, useAppSelector } from "../../hooks/use-redux";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 import {
   addBookmark,
   getBookmarksState,
   removeBookmark,
 } from "../../redux/slices/bookmarksSlice";
 import { API_KEY } from "../../config";
-import { useQuery } from "@tanstack/react-query";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Constants from "expo-constants";
+import { useQuery } from "@tanstack/react-query";
 
 const fetchDetails = async (mediaType: "movie" | "tv", id: number) => {
   const response = await fetch(

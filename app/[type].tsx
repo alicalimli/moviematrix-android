@@ -3,10 +3,11 @@ import { Stack, useRouter, useSearchParams } from "expo-router";
 import CardsSection from "../components/home/cards-section/CardsSection";
 import { useEffect, useState } from "react";
 import { API_KEY } from "../config";
-import { useAppSelector } from "../hooks/use-redux";
+import { useAppSelector } from "../hooks";
 import { getBookmarksState } from "../redux/slices/bookmarksSlice";
 
 import Constants from "expo-constants";
+import { useQuery } from "@tanstack/react-query";
 
 const getApiURL = (type, apiKey) => {
   switch (type) {
@@ -22,20 +23,30 @@ const getApiURL = (type, apiKey) => {
   }
 };
 
+const fetchCardsData = async (type: string | any, url) => {
+  const response = await fetch(url);
+  console.log("ASFASFASF");
+  const data = await response.json();
+
+  if (response.status !== 200) {
+    throw new Error(data.status_message);
+  } else {
+    return {
+      cardsData: data.results,
+    };
+  }
+};
+
 const CardsPage = () => {
   const router = useRouter();
   const { type } = useSearchParams();
 
-  const [cardsData, setCardsData] = useState([]);
   const { items: bookmarksData } = useAppSelector(getBookmarksState);
 
-  useEffect(() => {
-    if (type === "bookmarks") return setCardsData(bookmarksData);
-
-    fetch(getApiURL(type, API_KEY))
-      .then((res) => res.json())
-      .then((data) => setCardsData(data.results));
-  }, [type]);
+  const { data, error, isLoading } = useQuery({
+    queryKey: [type],
+    queryFn: () => fetchCardsData(type, getApiURL(type, API_KEY)),
+  });
 
   return (
     <SafeAreaView className="flex-1 bg-[#111] px-4">
@@ -51,7 +62,7 @@ const CardsPage = () => {
       />
 
       <View style={{ marginTop: Constants.statusBarHeight }} />
-      <CardsSection cardsData={cardsData} />
+      {!isLoading && <CardsSection cardsData={data.cardsData} />}
     </SafeAreaView>
   );
 };
