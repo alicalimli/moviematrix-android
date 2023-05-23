@@ -1,5 +1,5 @@
 import { View, SafeAreaView } from "react-native";
-import { Stack, useRouter, useSearchParams } from "expo-router";
+import { Stack, useNavigation, useRouter, useSearchParams } from "expo-router";
 import CardsSection from "../components/home/cards-section/CardsSection";
 import { useEffect, useState } from "react";
 import { API_KEY } from "../config";
@@ -24,8 +24,14 @@ const getApiURL = (type, apiKey) => {
 };
 
 const fetchCardsData = async (type: string | any, url) => {
+  if (!url) {
+    return {
+      cardsData: [],
+    };
+  }
+
   const response = await fetch(url);
-  console.log("ASFASFASF");
+
   const data = await response.json();
 
   if (response.status !== 200) {
@@ -38,7 +44,6 @@ const fetchCardsData = async (type: string | any, url) => {
 };
 
 const CardsPage = () => {
-  const router = useRouter();
   const { type } = useSearchParams();
 
   const { items: bookmarksData } = useAppSelector(getBookmarksState);
@@ -66,7 +71,9 @@ const CardsPage = () => {
       />
 
       <View style={{ marginTop: Constants.statusBarHeight }} />
-      {!isLoading && <CardsSection cardsData={data.cardsData} />}
+      {!isLoading && data.cardsData ? (
+        <CardsSection cardsData={data.cardsData} page={type as any} />
+      ) : null}
     </SafeAreaView>
   );
 };

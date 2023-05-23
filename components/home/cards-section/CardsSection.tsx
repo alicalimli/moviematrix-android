@@ -1,23 +1,27 @@
 import { useRouter } from "expo-router";
 import React, { useCallback } from "react";
-import {
-  FlatList,
-  Image,
-  Pressable,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { FlatList, Image, Pressable, View } from "react-native";
 
 interface CardsSectionProps {
   cardsData: any[];
+  page: "bookmarks" | "movies" | "home" | "shows";
 }
 
-const CardsSection = ({ cardsData }: CardsSectionProps) => {
+const CardsSection = ({ cardsData, page }: CardsSectionProps) => {
   const router = useRouter();
+
   const onImagePress = (card) => {
-    console.log(card);
-    router.push("/details/" + card.media_type + card.id);
+    let cardType = "";
+
+    if (page === "movies") {
+      cardType = "movie";
+    } else if (page === "shows") {
+      cardType = "tv";
+    } else {
+      cardType = card.media_type;
+    }
+
+    router.push("/details/" + cardType + card.id);
   };
 
   const renderCard = useCallback(

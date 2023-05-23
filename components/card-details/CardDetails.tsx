@@ -9,6 +9,7 @@ import {
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
+  Pressable,
 } from "react-native";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import {
@@ -47,15 +48,17 @@ const CardDetails = ({ id, type }: CardDetailsProps) => {
 
   const isBookmarked = items.find((item) => +item.id === +id) ? true : false;
 
-  const [movie, setMovie] = useState(null);
-
   const { data, error, isLoading } = useQuery({
     queryKey: [type, id],
     queryFn: () => fetchDetails(type, id),
   });
 
   const onBookmarkPress = (detail: any) => {
-    dispatch(isBookmarked ? removeBookmark(+detail.id) : addBookmark(detail));
+    dispatch(
+      isBookmarked
+        ? removeBookmark(+detail.id)
+        : addBookmark({ ...detail, media_type: type })
+    );
   };
 
   const details = data?.details;
@@ -86,7 +89,7 @@ const CardDetails = ({ id, type }: CardDetailsProps) => {
                 className="w-full h-96"
               />
 
-              <TouchableOpacity
+              <Pressable
                 style={{
                   marginTop: Constants.statusBarHeight,
                   marginLeft: 16,
@@ -95,37 +98,37 @@ const CardDetails = ({ id, type }: CardDetailsProps) => {
                 onPress={() => navigation.goBack()}
               >
                 <Ionicons name="arrow-back" size={24} color="white" />
-              </TouchableOpacity>
+              </Pressable>
             </View>
 
             <View className="p-4 gap-2">
               <View className="flex flex-row flex-wrap items-center">
                 <Text className="text-[#fff] text-2xl font-medium">
-                  {details?.title}
+                  {details?.title ?? details?.name}
                 </Text>
               </View>
 
               <Text className="text-slate-300 text-sm">
                 {details?.overview}
               </Text>
-              <TouchableOpacity
+              <Pressable
                 className="flex-1"
                 onPress={() => onBookmarkPress(details)}
               >
                 <Text
                   className={`
-                      text-center
-                  ${
-                    isBookmarked
-                      ? "bg-[#20C997] text-[#fff]"
-                      : "text-[#20C997] "
-                  }
-                  border border-[#20C997] p-2 px-6 text-lg rounded-full
-                `}
+                    text-center
+                    ${
+                      isBookmarked
+                        ? "bg-[#20C997] text-[#fff]"
+                        : "text-[#20C997] "
+                    }
+                    border border-[#20C997] p-2 px-6 text-lg rounded-full
+                  `}
                 >
                   {isBookmarked ? "Bookmarked" : "Bookmark"}
                 </Text>
-              </TouchableOpacity>
+              </Pressable>
             </View>
           </ScrollView>
         )}

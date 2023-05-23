@@ -11,7 +11,7 @@ const CardDetailsPage = ({}: CardDetailsProps) => {
 
   const mediaType = String(id).replace(/[0-9]/g, "");
   const newId = String(id).replace(/\D/g, "");
-  console.log(id);
+
   return <CardDetails type={mediaType} id={newId} />;
 };
 
