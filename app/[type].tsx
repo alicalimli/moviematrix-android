@@ -45,7 +45,11 @@ const CardsPage = () => {
 
   const { data, error, isLoading } = useQuery({
     queryKey: [type],
-    queryFn: () => fetchCardsData(type, getApiURL(type, API_KEY)),
+    queryFn: () => {
+      if (type === "bookmarks") return { cardsData: bookmarksData };
+
+      return fetchCardsData(type, getApiURL(type, API_KEY));
+    },
   });
 
   return (
