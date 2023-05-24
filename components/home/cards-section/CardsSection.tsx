@@ -1,12 +1,23 @@
 import { Stack, useRouter } from "expo-router";
 import React, { useCallback } from "react";
-import { FlatList, Image, Pressable, SafeAreaView, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  Pressable,
+  SafeAreaView,
+  View,
+  Text,
+} from "react-native";
 import { getBookmarksState } from "../../../redux/slices/bookmarksSlice";
 import { useAppSelector } from "../../../hooks";
 import { useQuery } from "@tanstack/react-query";
 import { API_KEY } from "../../../config";
 
 import Constants from "expo-constants";
+
+import ErrorSVG from "../../../assets/error.svg";
+import VoidSVG from "../../../assets/void.svg";
 
 const getApiURL = (type, apiKey) => {
   switch (type) {
@@ -100,7 +111,7 @@ const CardsSection = ({ page }: CardsSectionProps) => {
   );
 
   return (
-    <SafeAreaView className="flex-1 bg-[#111] px-4">
+    <SafeAreaView className="flex-1 bg-[#111] px-4 justify-center items-center">
       <View
         style={{ marginTop: Constants.statusBarHeight }}
         className="flex gap-2 mb-6"
@@ -116,16 +127,37 @@ const CardsSection = ({ page }: CardsSectionProps) => {
           }}
         />
 
-        <FlatList
-          data={cardsData}
-          renderItem={renderCard}
-          numColumns={2}
-          contentContainerStyle={{
-            gap: 8,
-            width: "100%",
-          }}
-          keyExtractor={keyExtractor}
-        />
+        {isLoading ? (
+          <ActivityIndicator size="large" />
+        ) : error ? (
+          <View className="items-center justify-center">
+            <ErrorSVG width={300} height={300} />
+            <Text className="text-[#fff] text-2xl font-medium">
+              Something Went Wrong
+            </Text>
+            <Text className="text-slate-300 mt-1">
+              Please check your internet connection and try again
+            </Text>
+          </View>
+        ) : !cardsData.length ? (
+          <View className="items-center justify-center">
+            <VoidSVG width={200} height={200} />
+            <Text className="text-[#fff] text-2xl mt-4 font-medium">
+              No Results Found
+            </Text>
+          </View>
+        ) : (
+          <FlatList
+            data={cardsData}
+            renderItem={renderCard}
+            numColumns={2}
+            contentContainerStyle={{
+              gap: 8,
+              width: "100%",
+            }}
+            keyExtractor={keyExtractor}
+          />
+        )}
       </View>
     </SafeAreaView>
   );
