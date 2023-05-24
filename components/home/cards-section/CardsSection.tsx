@@ -1,5 +1,5 @@
 import { Stack, useRouter } from "expo-router";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -62,16 +62,20 @@ const CardsSection = ({ page }: CardsSectionProps) => {
 
   const { items: bookmarksData } = useAppSelector(getBookmarksState);
 
-  const { data, error, isLoading } = useQuery({
+  const { data, error, isLoading, refetch } = useQuery({
     queryKey: [page],
     queryFn: () => {
-      if (page === "bookmarks") return { cardsData: bookmarksData };
+      if (page === "bookmarks") return { cardsData: [] };
 
       return fetchCardsData(page, getApiURL(page, API_KEY));
     },
   });
 
-  const cardsData = data?.cardsData;
+  useEffect(() => {
+    refetch();
+  }, [page]);
+
+  const cardsData = page === "bookmarks" ? bookmarksData : data?.cardsData;
 
   const onImagePress = (card) => {
     let cardType = "";
@@ -107,7 +111,7 @@ const CardsSection = ({ page }: CardsSectionProps) => {
 
   const keyExtractor = useCallback(
     (item) => `key-${item.name ?? item.title}`,
-    []
+    [cardsData]
   );
 
   return (

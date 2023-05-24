@@ -7,7 +7,8 @@ const bookmarksSlice = createSlice({
   },
   reducers: {
     addBookmark: (state, action) => {
-      state.items.push(action.payload);
+      const newState = [...state.items, action.payload];
+      state.items = newState;
     },
     removeBookmark: (state, action) => {
       const newItems = state.items.filter(
