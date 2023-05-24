@@ -75,7 +75,9 @@ const CardDetails = ({ id, type }: CardDetailsProps) => {
 
       <View>
         {isLoading ? (
-          <ActivityIndicator size="large" />
+          <View className="h-full justify-center items-center">
+            <ActivityIndicator size="large" />
+          </View>
         ) : error ? (
           <Text>Something went wrong</Text>
         ) : (
