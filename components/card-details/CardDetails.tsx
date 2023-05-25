@@ -63,6 +63,8 @@ const CardDetails = ({ id, type }: CardDetailsProps) => {
 
   const details = data?.details;
 
+  console.log(details);
+
   return (
     <SafeAreaView className="bg-[#111] flex-1">
       <Stack.Screen
@@ -93,44 +95,85 @@ const CardDetails = ({ id, type }: CardDetailsProps) => {
 
               <Pressable
                 style={{
-                  marginTop: Constants.statusBarHeight,
-                  marginLeft: 16,
+                  marginTop: Constants.statusBarHeight + 10,
+                  marginLeft: 20,
                 }}
                 className="absolute"
                 onPress={() => navigation.goBack()}
               >
-                <Ionicons name="arrow-back" size={24} color="white" />
+                <Ionicons name="arrow-back" size={30} color="white" />
               </Pressable>
             </View>
 
             <View className="p-4 gap-2">
+              <View className="flex-row items-center">
+                <View className="rounded-full bg-yellow-400 p-2 px-4">
+                  <Text className="font-medium">
+                    IMDB <Text>{details?.vote_average}</Text>
+                  </Text>
+                </View>
+                <Text className="text-slate-300 ml-3">
+                  ({details?.vote_count} reviews)
+                </Text>
+
+                <Pressable
+                  onPress={() => onBookmarkPress(details)}
+                  style={{
+                    marginTop: Constants.statusBarHeight + 10,
+                    marginLeft: 20,
+                  }}
+                  className="absolute right-4"
+                >
+                  <Ionicons
+                    name={isBookmarked ? "bookmark" : "bookmark-outline"}
+                    size={30}
+                    color="#20C997"
+                  />
+                </Pressable>
+              </View>
               <View className="flex flex-row flex-wrap items-center">
                 <Text className="text-[#fff] text-2xl font-medium">
-                  {details?.title ?? details?.name}
+                  {details?.title ?? details?.name ?? details?.original_title}
+                </Text>
+                <Text className="text-slate-300 text-sm mt-2">
+                  {details?.overview}
                 </Text>
               </View>
 
-              <Text className="text-slate-300 text-sm">
-                {details?.overview}
-              </Text>
-              <Pressable
-                className="flex-1"
-                onPress={() => onBookmarkPress(details)}
-              >
-                <Text
-                  className={`
-                    text-center
-                    ${
-                      isBookmarked
-                        ? "bg-[#20C997] text-[#fff]"
-                        : "text-[#20C997] "
-                    }
-                    border border-[#20C997] p-2 px-6 text-lg rounded-full
-                  `}
-                >
-                  {isBookmarked ? "Bookmarked" : "Bookmark"}
-                </Text>
-              </Pressable>
+              {/* <View className="flex-row pt-4">
+                <View className="border border-[#20C997] rounded-md items-center justify-center w-24 h-24">
+                  <Text className="text-2xl text-[#20C997]">
+                    {details?.vote_average ?? 0}
+                  </Text>
+                  <Text className="text-slate-300">
+                    {details?.vote_count ?? 0}
+                  </Text>
+                </View>
+                <View className="justify-center">
+                  <Text className="text-[#20C997]">
+                    Release Date:{" "}
+                    <Text className="text-white">
+                      {details?.release_date ??
+                        details?.first_air_date ??
+                        "N/A"}
+                    </Text>
+                  </Text>
+
+                  <Text className="text-[#20C997]">
+                    Duration:{" "}
+                    <Text className="text-white">
+                      {details?.runtime ?? "N/A"}
+                    </Text>
+                  </Text>
+
+                  <Text className="text-[#20C997]">
+                    Status:{" "}
+                    <Text className="text-white">
+                      {details?.status ?? "N/A"}
+                    </Text>
+                  </Text>
+                </View>
+              </View> */}
             </View>
           </ScrollView>
         )}
